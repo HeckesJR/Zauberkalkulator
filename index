@@ -1,0 +1,388 @@
+
+<style>
+.zk-root{font-family:var(--font-sans);padding:1rem 0;color:var(--color-text-primary)}
+.zk-title{font-size:17px;font-weight:500;margin:0 0 1rem}
+.zk-subtitle{font-size:13px;color:var(--color-text-secondary);margin:-0.75rem 0 1rem}
+.zk-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.zk-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem}
+.zk-card-full{grid-column:1/-1}
+.zk-label{font-size:12px;color:var(--color-text-secondary);font-weight:500;margin:0 0 4px;display:block}
+.zk-section{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--color-text-tertiary);margin:0 0 8px}
+.zk-props{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.zk-prop{display:flex;flex-direction:column;align-items:center;gap:3px}
+.zk-prop label{font-size:11px;color:var(--color-text-secondary);font-weight:500}
+.zk-prop input{width:100%;text-align:center;font-size:14px;font-weight:500}
+.zk-row{display:flex;gap:8px;align-items:flex-end;margin-bottom:8px}
+.zk-mods{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.zk-mod{display:flex;flex-direction:column;gap:3px}
+.zk-mod label{font-size:12px;color:var(--color-text-secondary)}
+.zk-sep{height:0.5px;background:var(--color-border-tertiary);margin:10px 0}
+.zk-presets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.zk-preset-btn{font-size:12px;padding:3px 10px;cursor:pointer;border-radius:var(--border-radius-md);background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);color:var(--color-text-primary)}
+.zk-preset-btn:hover{background:var(--color-background-tertiary)}
+.zk-preset-btn.active{background:var(--color-background-info);border-color:var(--color-border-info);color:var(--color-text-info)}
+.zk-rep-btns{display:flex;gap:6px;flex-wrap:wrap}
+.zk-rep-btn{font-size:12px;padding:3px 10px;cursor:pointer;border-radius:var(--border-radius-md);background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);color:var(--color-text-primary)}
+.zk-rep-btn:hover{background:var(--color-background-tertiary)}
+.zk-rep-btn.active{background:var(--color-background-success);border-color:var(--color-border-success);color:var(--color-text-success)}
+.zk-result-big{font-size:42px;font-weight:500;line-height:1}
+.zk-result-label{font-size:12px;color:var(--color-text-secondary);margin-top:3px}
+.zk-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.zk-metric{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 10px;text-align:center}
+.zk-metric-val{font-size:18px;font-weight:500}
+.zk-metric-lbl{font-size:11px;color:var(--color-text-secondary)}
+.zk-probe-display{display:flex;gap:6px;align-items:center;margin:8px 0}
+.zk-attr-badge{padding:4px 10px;border-radius:var(--border-radius-md);background:var(--color-background-info);color:var(--color-text-info);font-size:13px;font-weight:500}
+.zk-slash{color:var(--color-text-tertiary);font-size:14px}
+.zk-mr-badge{padding:3px 8px;border-radius:var(--border-radius-md);background:var(--color-background-warning);color:var(--color-text-warning);font-size:11px;font-weight:500}
+.zk-dist{margin-top:8px}
+.zk-dist-row{display:flex;align-items:center;gap:6px;margin-bottom:3px}
+.zk-dist-key{font-size:11px;color:var(--color-text-secondary);width:28px;text-align:right;flex-shrink:0}
+.zk-dist-bar-wrap{flex:1;background:var(--color-background-secondary);border-radius:2px;height:14px;overflow:hidden}
+.zk-dist-bar{height:100%;border-radius:2px;background:var(--color-background-info);transition:width .3s}
+.zk-dist-pct{font-size:11px;color:var(--color-text-secondary);width:36px;flex-shrink:0}
+.zk-success-ring{position:relative;width:100px;height:100px;flex-shrink:0}
+.zk-success-ring svg{transform:rotate(-90deg)}
+.zk-ring-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.zk-crit-badge{font-size:11px;padding:2px 8px;border-radius:var(--border-radius-md);background:var(--color-background-success);color:var(--color-text-success);display:inline-block}
+.zk-fumble-badge{font-size:11px;padding:2px 8px;border-radius:var(--border-radius-md);background:var(--color-background-danger);color:var(--color-text-danger);display:inline-block}
+.zk-warn{font-size:12px;color:var(--color-text-warning);background:var(--color-background-warning);border-radius:var(--border-radius-md);padding:6px 10px;margin-top:6px}
+.zk-search-wrap{position:relative}
+.zk-dropdown{position:absolute;top:100%;left:0;right:0;background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);max-height:200px;overflow-y:auto;z-index:100;margin-top:2px}
+.zk-dd-item{padding:6px 10px;font-size:13px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.zk-dd-item:hover{background:var(--color-background-secondary)}
+.zk-dd-item.sel{background:var(--color-background-info);color:var(--color-text-info)}
+.zk-dd-probe{font-size:11px;color:var(--color-text-tertiary)}
+.zk-dd-item.sel .zk-dd-probe{color:var(--color-text-info);opacity:.7}
+.zk-comp-badge{font-size:10px;padding:1px 5px;border-radius:3px;background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.zk-modsum{font-size:12px;color:var(--color-text-secondary);margin-top:6px}
+.zk-modsum span{font-weight:500;color:var(--color-text-primary)}
+.zk-empty{color:var(--color-text-tertiary);font-size:13px;text-align:center;padding:2rem 0}
+select{font-size:13px}
+</style>
+
+<div class="zk-root" id="zkapp"></div>
+
+<script>
+const SPELLS = [
+["Abvenenum","KL","KL","FF","C",false],["Accuratum","KL","CH","FF","C",false],["Adamantium","KL","FF","KO","C",false],["Adlerauge","KL","IN","FF","B",false],["Adlerschwinge","MU","IN","GE","D",false],["Aeolitus","KL","CH","KO","B",false],["Aerofugo","MU","KO","KK","D",false],["Aerogelo","MU","IN","KO","D",false],["Alpgestalt","MU","CH","GE","C",true],["Analys","KL","KL","IN","D",false],["Ängste lindern","MU","IN","CH","C",false],["Animatio","KL","FF","GE","E",false],["Applicatus","KL","FF","FF","C",false],["Aquafaxius","KL","FF","KO","C",true],["Aquasphaero","KL","FF","KO","D",true],["Arachnea","MU","IN","CH","D",false],["Arcanovi","KL","KL","FF","E",false],["Archofaxius","KL","FF","KO","C",true],["Archosphaero","KL","FF","KO","D",true],["Armatrutz","IN","GE","KO","B",false],["Atemnot","MU","KO","KK","C",true],["Attributo","KL","CH","—","B",false],["Aufgeblasen","CH","KK","KO","C",true],["Auge des Limbus","MU","KO","KK","E",false],["Aureolus","IN","CH","FF","A",false],["Auris Nasus","KL","CH","FF","D",false],["Axxeleratus","KL","GE","KO","C",false],
+["Balsam","KL","IN","CH","C",false],["Band und Fessel","KL","CH","KK","C",true],["Bannbaladin","IN","CH","CH","B",true],["Bärenruhe","MU","KO","KK","D",false],["Beherrschung brechen","KL","IN","CH","C",false],["Beschwörung vereiteln","MU","IN","CH","C",false],["Bewegung stören","KL","IN","FF","C",false],["Blendwerk","IN","CH","GE","C",false],["Blick aufs Wesen","KL","IN","CH","C",true],["Blick durch fremde Augen","MU","IN","CH","E",true],["Blick in die Gedanken","KL","KL","CH","D",true],["Blick in die Vergangenheit","KL","KL","IN","D",false],["Blitz dich find","KL","IN","GE","B",true],["Böser Blick","MU","CH","CH","C",true],["Brenne toter Stoff!","MU","KL","KO","C",false],
+["Caldofrigo","IN","CH","KO","E",false],["Chamaelioni","IN","CH","GE","C",false],["Chimaeroform","KL","IN","KO","F",false],["Chronoklassis","KL","IN","KO","F",false],["Chrononautos","MU","CH","KO","F",false],["Claudibus","KL","FF","KK","C",false],["Corpofesso","KL","KK","KK","C",true],["Corpofrigo","CH","GE","KO","C",true],["Cryptographo","KL","KL","IN","C",false],["Custodosigil","KL","FF","FF","C",false],
+["Dämonenbann","MU","CH","KO","C",false],["Delicioso","KL","CH","FF","D",false],["Desintegratus","KL","KK","KO","D",false],["Destructibo","KL","KL","FF","E",false],["Dichter und Denker","KL","IN","CH","C",true],["Dschinnenruf","MU","KL","CH","E",false],["Dunkelheit","KL","KL","FF","C",false],["Duplicatus","KL","CH","GE","C",false],
+["Ecliptifactus","MU","KL","KO","D",false],["Eigensch. wiederherstellen","KL","IN","CH","C",false],["Eigne Ängste","MU","IN","CH","C",true],["Einfluss bannen","IN","CH","CH","B",false],["Eins mit der Natur","IN","GE","KO","C",false],["Eisenrost","KL","CH","GE","C",false],["Eiseskälte","MU","IN","KO","C",false],["Elementarbann","IN","CH","KO","C",false],["Elementarer Diener","MU","KL","CH","D",false],["Elfenstimme","IN","CH","KO","D",false],["Erinnerung verlasse dich!","MU","IN","CH","D",true],["Exposami","KL","IN","IN","B",false],
+["Falkenauge","IN","FF","GE","B",false],["Favilludo","IN","CH","FF","A",false],["Firnlauf","MU","KL","GE","D",false],["Flim Flam","KL","KL","FF","A",false],["Fluch der Pestilenz","MU","KL","CH","D",true],["Foramen","KK","KL","FF","C",false],["Fortifex","IN","KK","KO","D",false],["Frigifaxius","KL","FF","KO","C",true],["Frigosphaero","KL","FF","KO","D",true],["Fulminictus","IN","GE","KO","C",false],
+["Gardianum","KL","IN","KO","D",false],["Gedankenbilder","KL","IN","CH","B",false],["Gefäß der Jahre","MU","KL","KO","E",false],["Gefunden!","KL","IN","GE","C",false],["Geisterbann","MU","MU","CH","C",false],["Geisterruf","MU","MU","CH","D",false],["Granit und Marmor","MU","CH","KO","D",true],["Große Gier","KL","KL","CH","C",true],["Große Verwirrung","KL","KL","CH","C",true],
+["Halluzination","KL","IN","CH","C",true],["Harmlose Gestalt","KL","CH","GE","C",false],["Hartes schmelze!","MU","KL","KK","C",false],["Haselbusch","CH","FF","KO","D",false],["Heilkraft bannen","KL","CH","FF","C",false],["Hellsicht trüben","KL","IN","CH","C",true],["Herbeirufung vereiteln","MU","IN","CH","C",false],["Herr über das Tierreich","MU","MU","CH","D",true],["Herzschlag","MU","CH","KK","D",true],["Hexenblick","IN","IN","CH","B",false],["Hexengalle","MU","IN","CH","C",false],["Hexenholz","KL","FF","KK","B",false],["Hexenknoten","KL","IN","CH","C",false],["Hexenkrallen","MU","IN","KO","C",false],["Hexenspeichel","IN","CH","FF","C",false],["Hilfreiche Tatze","MU","IN","CH","D",true],["Höllenpein","KL","CH","KO","C",true],["Holterdipolter","IN","IN","FF","C",false],["Horriphobus","IN","IN","FF","C",false],["Humofaxius","KL","FF","KO","C",true],["Humosphaero","KL","FF","KO","D",true],
+["Ignifaxius","KL","FF","KO","C",true],["Ignisphaero","KL","FF","KO","D",true],["Ignorantia","IN","CH","GE","D",false],["Illusion auflösen","KL","IN","CH","B",false],["Immortalis","MU","CH","KO","F",false],["Imperavi","KL","CH","CH","E",true],["Impersona","KL","IN","FF","D",false],["Infinitum","KL","CH","KO","F",false],["Invercano","MU","IN","FF","F",false],["Invocatio maior","MU","MU","CH","E",false],["Invocatio minor","MU","MU","CH","D",false],["Iribaars Hand","MU","MU","IN","D",true],
+["Juckreiz, dämlicher!","MU","IN","CH","B",true],["Karnifilo","MU","IN","CH","C",true],["Katzenaugen","KL","FF","KO","C",false],["Klarum Purum","KL","KL","CH","D",false],["Klickeradomms","KL","FF","KK","A",false],["Koboldgeschenk","IN","CH","FF","C",true],["Koboldovision","MU","CH","CH","D",false],["Komm Kobold","IN","IN","CH","C",false],["Körperlose Reise","MU","KL","IN","E",false],["Krabbelnder Schrecken","MU","MU","CH","C",false],["Kraft des Erzes","KL","KO","KK","D",false],["Krähenruf","MU","CH","CH","C",false],["Krötensprung","IN","GE","KK","B",false],["Kulminatio","MU","IN","FF","D",false],["Kusch!","MU","IN","CH","B",true],
+["Lach dich gesund","IN","CH","CH","C",false],["Lachkrampf","CH","CH","FF","C",true],["Langer Lulatsch","CH","GE","KK","D",true],["Last des Alters","IN","CH","KO","E",true],["Leib der Erde","MU","KL","GE","D",false],["Leib der Wogen","MU","KL","GE","E",false],["Leib des Eises","MU","KL","GE","E",false],["Leib des Erzes","MU","GE","KK","E",false],["Leib des Feuers","MU","MU","GE","E",false],["Leib des Windes","MU","GE","KK","E",false],["Leidensbund","MU","IN","KO","C",false],["Levthans Feuer","IN","CH","CH","D",true],["Limbus versiegeln","KL","IN","KO","E",false],["Lockruf","IN","CH","FF","B",false],["Lunge des Leviatan","IN","CH","KO","C",false],
+["Madas Spiegel","MU","KL","IN","D",false],["Magischer Raub","MU","KL","KO","D",true],["Mahlstrom","MU","IN","KK","D",false],["Manifesto","KL","IN","CH","A",false],["Meister der Elemente","MU","KL","CH","F",false],["Meister minderer Geister","MU","CH","CH","B",false],["Memorabia","KL","IN","CH","E",false],["Memorans","KL","KL","IN","C",false],["Menetekel","KL","CH","FF","B",false],["Metamagie neutralisieren","KL","KL","KO","F",false],["Metamorpho","KL","FF","KK","C",false],["Motoricus","KL","FF","KK","C",false],["Movimento","IN","GE","KO","A",false],["Murks und Patz","IN","IN","FF","C",false],
+["Nackedei","KL","IN","FF","D",false],["Nebelleib","MU","IN","KO","D",false],["Nebelwand","KL","FF","KO","C",false],["Nekropathia","MU","KL","CH","E",false],["Nihilogravo","KL","KO","KK","E",false],["Nuntiovolo","MU","KL","CH","C",false],
+["Objecto Obscuro","KL","FF","KO","D",false],["Objectofixo","KL","KL","KK","D",false],["Objectovoco","KL","IN","CH","C",false],["Objekt entzaubern","KL","IN","FF","C",false],["Oculus","KL","IN","CH","E",false],["Odem","KL","IN","IN","A",false],["Orcanofaxius","KL","FF","KO","C",true],["Orcanosphaero","KL","FF","KO","D",true],
+["Pandaemonium","MU","MU","CH","D",false],["Panik","MU","CH","CH","E",false],["Papperlapapp","IN","IN","FF","D",true],["Paralysis","IN","CH","KK","C",true],["Pectetondo","KL","CH","FF","B",false],["Penetrizzel","KL","KL","KO","C",false],["Pentagramma","MU","MU","CH","D",false],["Pestilenz erspüren","KL","IN","CH","C",false],["Pfeil des Elements","KL","IN","CH","C",false],["Planastrale","MU","MU","KO","F",false],["Plumbumbarum","CH","GE","KK","B",true],["Projektimago","MU","IN","CH","D",false],["Protectionis","KL","CH","KO","F",false],["Psychostabilis","MU","KL","KO","C",false],
+["Radau","MU","CH","KO","C",false],["Reflectimago","KL","CH","FF","B",false],["Reptilea","MU","IN","CH","D",false],["Respondami","MU","IN","CH","B",false],["Reversalis","KL","IN","CH","E",false],["Ruhe Körper","KL","CH","KO","B",false],
+["Salander","KL","CH","KO","E",true],["Sanftmut","MU","CH","CH","B",true],["Sapefacta","KL","CH","FF","C",false],["Satuarias Herrlichkeit","IN","CH","CH","B",false],["Schabernack","KL","IN","CH","B",true],["Schadenszauber bannen","MU","IN","KO","C",false],["Schelmenkleister","IN","FF","GE","C",false],["Schelmenlaune","MU","IN","CH","D",false],["Schelmenmaske","IN","CH","GE","D",false],["Schelmenrausch","IN","CH","CH","C",true],["Schleier der Unwissenheit","KL","KL","FF","D",false],["Schwarz und Rot","MU","CH","KO","D",true],["Schwarzer Schrecken","MU","IN","CH","D",true],["Seelentier erkennen","IN","IN","CH","C",true],["Seelenwanderung","MU","CH","KO","F",false],["Seidenweich","IN","FF","FF","C",false],["Seidenzunge","KL","IN","CH","B",true],["Sensattacco","MU","IN","GE","D",false],["Sensibar","KL","IN","CH","C",true],["Serpentialis","MU","CH","GE","D",false],["Silentium","KL","IN","CH","B",false],["Sinesigil","KL","IN","FF","D",false],["Skelettarius","MU","MU","CH","C",false],["Solidirid","IN","KO","KK","D",false],["Somnigravis","KL","CH","CH","B",true],["Spinnenlauf","IN","GE","KK","C",false],["Spurlos","IN","GE","GE","E",false],["Standfest","IN","FF","GE","E",false],["Staub wandle!","MU","KL","CH","E",false],["Stein wandle!","MU","CH","KK","E",false],["Stillstand","MU","IN","GE","C",false],["Sumus Elixiere","IN","CH","FF","C",false],
+["Tauschrausch","IN","FF","KO","D",false],["Tempus Stasis","MU","KL","KK","E",false],["Tiere besprechen","MU","IN","CH","C",false],["Tiergedanken","MU","IN","CH","C",true],["Tlalucs Odem","MU","IN","GE","C",false],["Totes handle!","MU","CH","KO","D",false],["Transformatio","KL","FF","KK","E",false],["Transmutare","CH","GE","KO","D",true],["Transversalis","KL","IN","KO","E",false],["Traumgestalt","IN","CH","CH","D",true],
+["Unberührt von Satinav","KL","FF","KO","C",false],["Unitatio","IN","CH","KO","B",false],["Unsichtbarer Jäger","IN","FF","GE","E",false],
+["Veränderung aufheben","KL","IN","KO","D",false],["Verschwindibus","IN","CH","GE","C",false],["Verständigung stören","KL","KL","IN","C",true],["Verwandlung beenden","KL","CH","FF","D",false],["Vipernblick","MU","MU","CH","B",true],["Visibili","KL","IN","GE","C",false],["Vocolimbo","KL","CH","FF","B",false],["Vogelzwitschern","MU","IN","GE","B",false],
+["Wand aus Dornen","MU","KL","CH","D",false],["Warmes Blut","MU","IN","IN","B",false],["Wasseratem","MU","KL","KO","C",false],["Weiches erstarre!","MU","KL","KK","C",false],["Weihrauchwolke","IN","CH","FF","B",false],["Weisheit der Bäume","MU","IN","KO","D",false],["Weiße Mähne","KL","IN","CH","D",false],["Wellenlauf","MU","GE","GE","D",false],["Wettermeisterschaft","MU","CH","GE","E",false],["Widerwille","MU","IN","GE","D",false],["Windhose","MU","IN","KK","D",false],["Windstille","KL","CH","KK","C",false],["Wipfellauf","MU","IN","GE","D",false],
+["Xenographus","KL","KL","IN","E",false],
+["Zagibu","IN","CH","FF","C",false],["Zappenduster","IN","IN","FF","C",false],["Zauberklinge","KL","FF","KO","D",false],["Zaubernahrung","MU","MU","KO","C",false],["Zauberwesen","MU","IN","CH","B",false],["Zauberzwang","MU","CH","CH","E",true],["Zorn der Elemente","MU","CH","KO","C",false],["Zunge lähmen","MU","CH","FF","B",true],["Zwingtanz","MU","KL","CH","D",true]
+];
+
+const PRESETS = {
+  "Jinbe":       {MU:14,KL:14,IN:14,CH:14,FF:10,GE:12,KO:11,KK:11},
+  "Cutty Framm": {MU:11,KL:14,IN:11,CH:12,FF:13,GE:12,KO:12,KK:14},
+  "Shaelyra":    {MU:13,KL:11,IN:12,CH:9, FF:14,GE:15,KO:13,KK:12},
+  "Gobuta":      {MU:10,KL:8, IN:14,CH:12,FF:10,GE:15,KO:11,KK:13}
+};
+
+const PROPS = ["MU","KL","IN","CH","FF","GE","KO","KK"];
+const PROP_NAMES = {MU:"Mut",KL:"Klugheit",IN:"Intuition",CH:"Charisma",FF:"Fingerfertigkeit",GE:"Gewandtheit",KO:"Konstitution",KK:"Körperkraft"};
+const COMP_COLORS = {A:"#3B6D11",B:"#185FA5",C:"#444441",D:"#854F0B",E:"#A32D2D",F:"#791F1F"};
+
+let state = {
+  search: "",
+  showDD: false,
+  spell: null,
+  props: {...PRESETS["Jinbe"]},
+  ZfW: 10,
+  rep: "Mag",
+  preset: "Jinbe",
+  mods: {MR:0, LE:0, AU:0, aufrecht:0, BE:0, wiederholung:0, freeMod:0},
+  attrOverride: "KL"
+};
+
+function getEffectiveMod() {
+  const m = state.mods;
+  const leMod = [0,3,6,9][m.LE]||0;
+  const auMod = [0,3,6][m.AU]||0;
+  const beMod = Math.max(0, m.BE-2);
+  return m.MR + leMod + auMod + m.aufrecht*3 + beMod + m.wiederholung*3 + m.freeMod;
+}
+
+function calcResults(E1,E2,E3,ZfW,modifier) {
+  let succ=0, fumb=0, crit=0;
+  const dist = {};
+  for (let d1=1;d1<=20;d1++) for (let d2=1;d2<=20;d2++) for (let d3=1;d3<=20;d3++) {
+    const nT=(d1===20?1:0)+(d2===20?1:0)+(d3===20?1:0);
+    const nO=(d1===1?1:0)+(d2===1?1:0)+(d3===1?1:0);
+    if (nT>=2){fumb++;continue}
+    const pool=ZfW-modifier;
+    if (nO>=2){
+      crit++;succ++;
+      const zs=Math.max(1,pool>0?pool:1);
+      dist[zs]=(dist[zs]||0)+1;
+      continue;
+    }
+    let rem;
+    if (pool>=0){
+      const ex=Math.max(0,d1-E1)+Math.max(0,d2-E2)+Math.max(0,d3-E3);
+      rem=pool-ex;
+    } else {
+      const ex=Math.max(0,d1-(E1+pool))+Math.max(0,d2-(E2+pool))+Math.max(0,d3-(E3+pool));
+      rem=-ex;
+    }
+    if (rem>=0){
+      succ++;
+      const zs=Math.max(1,rem);
+      dist[zs]=(dist[zs]||0)+1;
+    }
+  }
+  const total=8000;
+  let expZfp=0, succCount=0;
+  Object.entries(dist).forEach(([k,v])=>{expZfp+=parseInt(k)*v;succCount+=v;});
+  return {
+    successRate:succ/total,
+    fumbleRate:fumb/total,
+    criticalRate:crit/total,
+    dist,
+    expectedZfp: succCount>0?expZfp/succCount:0,
+    succCount
+  };
+}
+
+function getAttrVal(attr) {
+  if (attr==="—") return state.props[state.attrOverride]||10;
+  return state.props[attr]||10;
+}
+
+function getProbe() {
+  if (!state.spell) return null;
+  return [state.spell[1],state.spell[2],state.spell[3]];
+}
+
+function getResults() {
+  const spell = state.spell;
+  if (!spell) return null;
+  const probe = [spell[1],spell[2],spell[3]];
+  const E = probe.map(a => a==="—"?state.props[state.attrOverride]||10:state.props[a]||10);
+  const mod = getEffectiveMod();
+  return calcResults(E[0],E[1],E[2],state.ZfW,mod);
+}
+
+function render() {
+  const app = document.getElementById("zkapp");
+  const filtered = SPELLS.filter(s=>s[0].toLowerCase().includes(state.search.toLowerCase()));
+  const mod = getEffectiveMod();
+  const res = getResults();
+  const probe = getProbe();
+  const pool = state.ZfW - mod;
+
+  let html = `
+<h2 class="zk-title">DSA 4.1 — Zauberkalkulator</h2>
+<p class="zk-subtitle">Alle ${SPELLS.length} Zauber aus dem Liber Cantiones · Exakte Probenberechnung (8.000 Kombinationen)</p>
+<div class="zk-grid">
+
+<div class="zk-card">
+  <p class="zk-section">1 — Zauber wählen</p>
+  <div class="zk-search-wrap">
+    <input id="spell-search" type="text" placeholder="Zauber suchen…" value="${state.search}" style="width:100%;margin-bottom:0"
+      oninput="state.search=this.value;state.showDD=true;render()"
+      onfocus="state.showDD=true;render()"
+      onblur="setTimeout(()=>{state.showDD=false;render()},180)">
+    ${state.showDD && filtered.length>0?`
+    <div class="zk-dropdown">${filtered.slice(0,80).map(s=>`
+      <div class="zk-dd-item ${state.spell&&state.spell[0]===s[0]?'sel':''}"
+        onmousedown="state.spell=s;state.search=s[0];state.showDD=false;render()">
+        <span>${s[0]}</span>
+        <span style="display:flex;gap:4px;align-items:center">
+          <span class="zk-dd-probe">${s[1]}/${s[2]}/${s[3]}</span>
+          ${s[5]?'<span style="font-size:10px;color:#854F0B">+MR</span>':''}
+          <span class="zk-comp-badge" style="color:${COMP_COLORS[s[4]]}">${s[4]}</span>
+        </span>
+      </div>`).join("")}
+    </div>`:``}
+  </div>
+  ${state.spell?`
+  <div class="zk-probe-display">
+    ${probe.map(a=>`<span class="zk-attr-badge">${a}</span>`).join('<span class="zk-slash">/</span>')}
+    ${state.spell[5]?`<span class="zk-mr-badge">+MR</span>`:''}
+    <span style="margin-left:4px;font-size:12px;color:var(--color-text-secondary)">Kompl. ${state.spell[4]}</span>
+  </div>
+  ${state.spell[1]==="—"||state.spell[2]==="—"||state.spell[3]==="—"?`
+  <div style="margin-top:6px"><label class="zk-label">Variable Eigenschaft</label>
+  <select onchange="state.attrOverride=this.value;render()">
+    ${PROPS.map(p=>`<option value="${p}" ${state.attrOverride===p?'selected':''}>${p} (${state.props[p]})</option>`).join('')}
+  </select></div>`:''}
+  `:`<p style="font-size:13px;color:var(--color-text-tertiary);margin-top:8px">— noch kein Zauber gewählt —</p>`}
+  
+  <div class="zk-sep"></div>
+  <div style="display:flex;gap:10px;align-items:flex-end">
+    <div style="flex:1"><label class="zk-label">ZfW (Zauberfertigkeitswert)</label>
+    <input type="number" id="zfw" min="0" max="30" value="${state.ZfW}" style="width:100%;font-size:16px;font-weight:500;text-align:center"
+      oninput="state.ZfW=Math.max(0,Math.min(30,parseInt(this.value)||0));render()"></div>
+    <div style="font-size:12px;color:var(--color-text-secondary);padding-bottom:8px">max ZfP*: <strong>${Math.max(0,pool)}</strong></div>
+  </div>
+</div>
+
+<div class="zk-card">
+  <p class="zk-section">2 — Held</p>
+  <div class="zk-presets">
+    ${Object.keys(PRESETS).map(n=>`
+    <button class="zk-preset-btn ${state.preset===n?'active':''}"
+      onclick="state.props={...PRESETS['${n}']};state.preset='${n}';render()">
+      ${n}</button>`).join("")}
+    <button class="zk-preset-btn ${state.preset===null?'active':''}"
+      onclick="state.preset=null;render()">Eigener</button>
+  </div>
+  <div class="zk-props">
+    ${PROPS.map(p=>`
+    <div class="zk-prop">
+      <label title="${PROP_NAMES[p]}">${p}</label>
+      <input type="number" min="1" max="21" value="${state.props[p]||10}"
+        style="${probe&&probe.includes(p)?'border-color:var(--color-border-info);background:var(--color-background-info)':''}"
+        oninput="state.props['${p}']=Math.max(1,Math.min(21,parseInt(this.value)||10));state.preset=null;render()">
+    </div>`).join("")}
+  </div>
+  ${probe?`<p style="font-size:11px;color:var(--color-text-tertiary);margin-top:6px">Hervorgehobene Felder: für aktuelle Probe relevante Eigenschaften</p>`:''}
+</div>
+
+<div class="zk-card">
+  <p class="zk-section">3 — Repräsentation</p>
+  <div class="zk-rep-btns">
+    ${["Mag","Elf","Dru","Geo","Hex","Sch"].map(r=>`
+    <button class="zk-rep-btn ${state.rep===r?'active':''}" onclick="state.rep='${r}';render()">${r}</button>`).join("")}
+  </div>
+  ${state.rep==="Mag"?`<p style="font-size:12px;color:var(--color-text-secondary);margin-top:8px">Gildenmagie: Spontane Modifikations-Zuschläge werden halbiert · Verlängerungsbonus +1</p>`:''}
+  ${state.rep==="Elf"?`<p style="font-size:12px;color:var(--color-text-secondary);margin-top:8px">Elfisch: Doppelte Wirkungsdauer gratis · augenblicklich/permanent: –1 AsP · Wiederholung: +5 statt +3</p>`:''}
+  ${state.rep==="Dru"||state.rep==="Geo"?`<p style="font-size:12px;color:var(--color-text-secondary);margin-top:8px">Kein Kontakt mit verhüttetem Metall als Voraussetzung</p>`:''}
+  ${state.rep==="Hex"?`<p style="font-size:12px;color:var(--color-text-secondary);margin-top:8px">Hexe: Misslingen kostet nur 1/3 der AsP · Stimmungsbonus möglich (±3 ZfP*)</p>`:''}
+  ${state.rep==="Sch"?`<p style="font-size:12px;color:var(--color-text-secondary);margin-top:8px">Schelme: MR bis 3 ignorierbar · Kosten auf 2/3 reduziert</p>`:''}
+</div>
+
+<div class="zk-card">
+  <p class="zk-section">4 — Erschwernisse</p>
+  <div class="zk-mods">
+    <div class="zk-mod">
+      <label>Magieresistenz (MR) des Opfers</label>
+      <input type="number" min="0" max="30" value="${state.mods.MR}"
+        oninput="state.mods.MR=Math.max(0,parseInt(this.value)||0);render()">
+    </div>
+    <div class="zk-mod">
+      <label>Aufrechterhaltene Zauber</label>
+      <input type="number" min="0" max="5" value="${state.mods.aufrecht}"
+        oninput="state.mods.aufrecht=Math.max(0,parseInt(this.value)||0);render()">
+    </div>
+    <div class="zk-mod">
+      <label>Niedrige LeP (0=normal, 1=½, 2=⅓, 3=¼)</label>
+      <select onchange="state.mods.LE=parseInt(this.value);render()">
+        ${[0,1,2,3].map(i=>`<option value="${i}" ${state.mods.LE===i?'selected':''}>${["Normal","Hälfte (+3)","Drittel (+6)","Viertel (+9)"][i]}</option>`).join('')}
+      </select>
+    </div>
+    <div class="zk-mod">
+      <label>Niedrige AuP (0=normal, 1=⅓, 2=¼)</label>
+      <select onchange="state.mods.AU=parseInt(this.value);render()">
+        ${[0,1,2].map(i=>`<option value="${i}" ${state.mods.AU===i?'selected':''}>${["Normal","Drittel (+3)","Viertel (+6)"][i]}</option>`).join('')}
+      </select>
+    </div>
+    <div class="zk-mod">
+      <label>Behinderung (BE-Wert)</label>
+      <input type="number" min="0" max="8" value="${state.mods.BE}"
+        oninput="state.mods.BE=Math.max(0,parseInt(this.value)||0);render()">
+    </div>
+    <div class="zk-mod">
+      <label>Wiederholungsversuche (×3)</label>
+      <input type="number" min="0" max="5" value="${state.mods.wiederholung}"
+        oninput="state.mods.wiederholung=Math.max(0,parseInt(this.value)||0);render()">
+    </div>
+    <div class="zk-mod">
+      <label>Weitere Erschwernis / Erleichterung</label>
+      <input type="number" min="-20" max="30" value="${state.mods.freeMod}"
+        oninput="state.mods.freeMod=parseInt(this.value)||0;render()">
+    </div>
+  </div>
+  ${mod>0?`<p class="zk-modsum">Gesamt-Erschwernis: <span>+${mod}</span> · effektive ZfP: <span style="color:${pool<0?'var(--color-text-danger)':'var(--color-text-primary)'}">${pool}</span></p>`:''}
+  ${pool<0?`<p class="zk-warn">Effektiver ZfP-Wert negativ (${pool}): Dieser Wert wirkt als zusätzliche Erschwernis auf alle drei Teilproben</p>`:''}
+</div>
+
+<div class="zk-card zk-card-full">
+  <p class="zk-section">Ergebnis</p>
+  ${!res?`<p class="zk-empty">Bitte zuerst einen Zauber auswählen und ZfW eingeben</p>`:`
+  <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap">
+    <div>
+      <svg class="zk-success-ring" width="100" height="100" viewBox="0 0 100 100" role="img" aria-label="Erfolgswahrscheinlichkeit">
+        <circle cx="50" cy="50" r="40" fill="none" stroke="var(--color-border-tertiary)" stroke-width="10"/>
+        <circle cx="50" cy="50" r="40" fill="none"
+          stroke="${res.successRate>=0.7?'#3B6D11':res.successRate>=0.4?'#854F0B':'#A32D2D'}"
+          stroke-width="10"
+          stroke-dasharray="${(res.successRate*251.2).toFixed(1)} 251.2"
+          stroke-linecap="round"/>
+      </svg>
+      <div style="text-align:center;margin-top:4px">
+        <div style="font-size:18px;font-weight:500">${(res.successRate*100).toFixed(1)}%</div>
+        <div style="font-size:11px;color:var(--color-text-secondary)">Erfolg</div>
+      </div>
+    </div>
+    <div style="flex:1;min-width:200px">
+      <div class="zk-metrics">
+        <div class="zk-metric">
+          <div class="zk-metric-val">${res.expectedZfp.toFixed(1)}</div>
+          <div class="zk-metric-lbl">Erwartete ZfP*</div>
+        </div>
+        <div class="zk-metric">
+          <div class="zk-metric-val" style="color:var(--color-text-success)">${(res.criticalRate*100).toFixed(2)}%</div>
+          <div class="zk-metric-lbl">Kritischer Erfolg</div>
+        </div>
+        <div class="zk-metric">
+          <div class="zk-metric-val" style="color:var(--color-text-danger)">${(res.fumbleRate*100).toFixed(2)}%</div>
+          <div class="zk-metric-lbl">Patzer</div>
+        </div>
+      </div>
+      <div style="margin-top:10px;font-size:12px;color:var(--color-text-secondary)">
+        <span>Misslingen kostet <strong>${state.rep==="Hex"?"⅓":"½"}</strong> der geplanten AsP</span>
+        ${state.rep==="Elf"?'<span style="margin-left:8px">· Wiederholung: <strong>+5</strong> statt +3</span>':''}
+        ${res.successRate<0.1?`<span style="margin-left:8px;color:var(--color-text-danger)">Sehr schwierig!</span>`:''}
+        ${res.successRate>0.95?`<span style="margin-left:8px;color:var(--color-text-success)">Nahezu sicher</span>`:''}
+      </div>
+    </div>
+    <div style="flex:2;min-width:220px">
+      <p style="font-size:12px;color:var(--color-text-secondary);margin-bottom:8px">ZfP*-Verteilung (bei Erfolg)</p>
+      <div class="zk-dist">
+        ${Object.entries(res.dist).sort((a,b)=>parseInt(a[0])-parseInt(b[0])).slice(0,Math.min(15,Object.keys(res.dist).length)).map(([k,v])=>{
+          const pct=(v/8000*100);
+          return `<div class="zk-dist-row">
+            <span class="zk-dist-key">${k}</span>
+            <div class="zk-dist-bar-wrap"><div class="zk-dist-bar" style="width:${Math.min(100,pct*4).toFixed(1)}%"></div></div>
+            <span class="zk-dist-pct">${pct.toFixed(1)}%</span>
+          </div>`;
+        }).join("")}
+        ${Object.keys(res.dist).length>15?`<div style="font-size:11px;color:var(--color-text-tertiary);margin-top:4px">… weitere ZfP*-Stufen nicht angezeigt</div>`:''}
+      </div>
+    </div>
+  </div>
+  ${state.spell&&state.spell[5]&&state.mods.MR===0?`<p class="zk-warn">Dieser Zauber richtet sich gegen die Magieresistenz des Opfers (+MR). Bitte MR-Wert eintragen!</p>`:''}
+  `}
+</div>
+</div>`;
+
+  app.innerHTML = html;
+  const ddItems = app.querySelectorAll('.zk-dd-item');
+  ddItems.forEach((el,i)=>{
+    const s=filtered[i];
+    if(s) el.addEventListener('mousedown',e=>{e.preventDefault();state.spell=s;state.search=s[0];state.showDD=false;render()});
+  });
+}
+
+render();
+</script>
